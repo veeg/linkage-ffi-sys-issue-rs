@@ -1,0 +1,11 @@
+[package]
+name = "plugin-user-rs"
+version = "0.1.0"
+authors = ["Vegard Sandengen <vegardsa@spacetec.no>"]
+edition = "2018"
+
+[lib]
+crate-type = [ "cdylib" ]
+
+[dependencies]
+libplugin-sys = { path = "../libplugin-sys-rs" }

@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+#
+mkdir -p $(pwd)/build
+
+# libplugin-c
+gcc -fPIC -fvisibility=hidden -o $(pwd)/build/libplugin.c.o -c $(pwd)/libplugin-c/libplugin.c
+ar qc $(pwd)/build/libplugin.a $(pwd)/build/libplugin.c.o
+
+# plugin-user-c
+gcc -shared -o $(pwd)/build/libplugin_user_c.so -fPIC $(pwd)/plugin-user-c/user.c -I$(pwd)/libplugin-c/ -lplugin -L$(pwd)/build
+
+# plugin-user-rs
+cd plugin-user-rs && cargo build && cp target/debug/libplugin_user_rs.so ../build/ && cd ..
+
+# loader test
+gcc loader/loader.c -o loader-test -ldl
+
+# run test
+./loader-test
